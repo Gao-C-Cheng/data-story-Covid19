@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+
+<body>
+    <section class="hero is-link">
+        <div class="hero-body">
+            <p style="font-family: Times New Roman" class="title">
+                The Study of COVID-19 of Major Countries in the World
+            </p>
+        </div>
+    </section>
+    <section class="section">
+        <div class="card container">
+            <div class="card-content">
+                <p class="title column is-full" style="font-family: Times New Roman">
+                    Aims and Objectives:
+                </p>
+                <p class="subtitle column is-half" style="font-family: Times New Roman">
+                    This project aim to perform a study on COVID-19 including the number of COVID-19 cases,
+                    the death rates and percentage of people getting vaccination of major countriesaround the world
+                    <br>
+            </div>
+            <div class="card-content">
+                <div id="app"></div>
+                <script type="text/javascript" src="http://localhost:8080/app.js"></script>
+                <div class="content">
+                    <p class="subtitle" style="font-family: Times New Roman">(1) Bar Chart: showing the COVID-19 cases of major countries
+                        in the world (Done by team member: HUANG)</p>
+                    <br>
+                    <p class="subtitle" style="font-family: Times New Roman">(2) World Chart: showing the cumulative vaccination rate of
+                        major countries in the World (Done by team member: HUANG)</p>
+                    <br>
+                    <time datetime="2021-12-1">2:00 PM - 1 Dec 2021</time>
+                </div>
+            </div>
+        </div>
+        <div id="app1" class="container">
+            <div class="card container">
+                <div class="card">
+                    <div class="card-content">
+                        <b-tabs size="is-large" v-model="activeTab">
+                            <b-tab-item label="Map Chart">
+                                <div class="card-image" id="chart4" style="height:80vh; width: auto;"></div>
+                            </b-tab-item>
+
+                            <b-tab-item label="Bar Chart">
+                                <div class="card-image" id="chart5" style="height:80vh; width: auto;">
+
+                                </div>
+                            </b-tab-item>
+
+                            <b-tab-item label="Line Chart">
+                                <div class="card-image" id="chart6" style="height:80vh; width: auto;">
+
+                                </div>
+                            </b-tab-item>
+                        </b-tabs>
+
+                        <div class="card-content">
+                            <div class="content">
+                                <p class="subtitle" style="font-family: Times New Roman">(1) Map Chart: showing the cumulative confirmed
+                                    deaths cases per million people (Done
+                                    by team member: GAO)</p>
+                                <br>
+                                <p class="subtitle" style="font-family: Times New Roman">(2) Bar Chart: showing the cumulative confirmed
+                                    COVID-19 deaths cases of major
+                                    countries (Done by team member: GAO)</p>
+                                <br>
+                                <p class="subtitle" style="font-family: Times New Roman">(3) Line Chart: showing the daily new confirmed
+                                    COVID-19 deaths per million people of
+                                    major countries (Done by team member: GAO)</p>
+                                <br>
+                                <time datetime="2021-12-1">2:00 PM - 1 Dec 2021</time>
+                            </div>
+                        </div>
+                        <div class="card-content column is-half">
+                            <p class="title" style="font-family: Times New Roman">
+                                Conclusions:
+                            </p>
+                            <p class="subtitle" style="font-family: Times New Roman">
+                                1. South America, North America and Central Europe have the most severe death rate arising
+                                from COVID-19.</p>
+    
+                            <p class="subtitle" style="font-family: Times New Roman">2. United States, Brazil and Russia
+                                have the highest cumulative number of confirmed COVID-19
+                                cases</p>
+    
+                            <p class="subtitle" style="font-family: Times New Roman">3. United States, Russsia, Brazil and
+                                United Kingdom have the highest daily new confirmed
+                                death cases However,
+                                the outbreak period is different in different countries. The United Kingdom reached its peak
+                                in January which is 18 deaths per million people,
+                                and Russia reached its peak in November, peaking at 8.3 deaths per million people.</p>
+                            <p class="subtitle" style="font-family: Times New Roman"> 4. The percentage of vaccination rates
+                                are the highest in Australia, Mongolia and Southern
+                                part of America.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card container">
+                <div class="card">
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="content has-text-centered">
+        </div>
+      </footer>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <!-- Full bundle -->
+    <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+
+    <!-- Individual components -->
+    <script src="https://unpkg.com/buefy/dist/components/table"></script>
+    <script src="https://unpkg.com/buefy/dist/components/input"></script>
+
+    <script src="//www.amcharts.com/lib/4/core.js"></script>
+    <script src="//www.amcharts.com/lib/4/maps.js"></script>
+    <script src="//cdn.amcharts.com/lib/4/geodata/worldUltra.js"></script>
+    <script src="//www.amcharts.com/lib/4/themes/animated.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+
+    <script>
+        var vm = new Vue({
+            el: '#app1',
+            data: {
+                iso3_iso2: {
+                    AFG: "AF",
+                    ALA: "AX",
+                    ALB: "AL",
+                    DZA: "DZ",
+                    ASM: "AS",
+                    AND: "AD",
+                    AGO: "AO",
+                    AIA: "AI",
+                    ATA: "AQ",
+                    ATG: "AG",
+                    ARG: "AR",
+                    ARM: "AM",
+                    ABW: "AW",
+                    AUS: "AU",
+                    AUT: "AT",
+                    AZE: "AZ",
+                    BHS: "BS",
+                    BHR: "BH",
+                    BGD: "BD",
+                    BRB: "BB",
+                    BLR: "BY",
+                    BEL: "BE",
+                    BLZ: "BZ",
+                    BEN: "BJ",
+                    BMU: "BM",
+                    BTN: "BT",
+                    BOL: "BO",
+                    BIH: "BA",
+                    BWA: "BW",
+                    BVT: "BV",
+                    BRA: "BR",
+                    VGB: "VG",
+                    IOT: "IO",
+                    BRN: "BN",
+                    BGR: "BG",
+                    BFA: "BF",
+                    BDI: "BI",
+                    KHM: "KH",
+                    CMR: "CM",
+                    CAN: "CA",
+                    CPV: "CV",
+                    CYM: "KY",
+                    CAF: "CF",
+                    TCD: "TD",
+                    CHL: "CL",
+                    CHN: "CN",
+                    HKG: "HK",
+                    MAC: "MO",
+                    CXR: "CX",
+                    CCK: "CC",
+                    COL: "CO",
+                    COM: "KM",
+                    COG: "CG",
+                    COD: "CD",
+                    COK: "CK",
+                    CRI: "CR",
+                    CIV: "CI",
+                    HRV: "HR",
+                    CUB: "CU",
+                    CYP: "CY",
+                    CZE: "CZ",
+                    DNK: "DK",
+                    DJI: "DJ",
+                    DMA: "DM",
+                    DOM: "DO",
+                    ECU: "EC",
+                    EGY: "EG",
+                    SLV: "SV",
+                    GNQ: "GQ",
+                    ERI: "ER",
+                    EST: "EE",
+                    ETH: "ET",
+                    FLK: "FK",
+                    FRO: "FO",
+                    FJI: "FJ",
+                    FIN: "FI",
+                    FRA: "FR",
+                    GUF: "GF",
+                    PYF: "PF",
+                    ATF: "TF",
+                    GAB: "GA",
+                    GMB: "GM",
+                    GEO: "GE",
+                    DEU: "DE",
+                    GHA: "GH",
+                    GIB: "GI",
+                    GRC: "GR",
+                    GRL: "GL",
+                    GRD: "GD",
+                    GLP: "GP",
+                    GUM: "GU",
+                    GTM: "GT",
+                    GGY: "GG",
+                    GIN: "GN",
+                    GNB: "GW",
+                    GUY: "GY",
+                    HTI: "HT",
+                    HMD: "HM",
+                    VAT: "VA",
+                    HND: "HN",
+                    HUN: "HU",
+                    ISL: "IS",
+                    IND: "IN",
+                    IDN: "ID",
+                    IRN: "IR",
+                    IRQ: "IQ",
+                    IRL: "IE",
+                    IMN: "IM",
+                    ISR: "IL",
+                    ITA: "IT",
+                    JAM: "JM",
+                    JPN: "JP",
+                    JEY: "JE",
+                    JOR: "JO",
+                    KAZ: "KZ",
+                    KEN: "KE",
+                    KIR: "KI",
+                    PRK: "KP",
+                    KOR: "KR",
+                    KWT: "KW",
+                    KGZ: "KG",
+                    LAO: "LA",
+                    LVA: "LV",
+                    LBN: "LB",
+                    LSO: "LS",
+                    LBR: "LR",
+                    LBY: "LY",
+                    LIE: "LI",
+                    LTU: "LT",
+                    LUX: "LU",
+                    MKD: "MK",
+                    MDG: "MG",
+                    MWI: "MW",
+                    MYS: "MY",
+                    MDV: "MV",
+                    MLI: "ML",
+                    MLT: "MT",
+                    MHL: "MH",
+                    MTQ: "MQ",
+                    MRT: "MR",
+                    MUS: "MU",
+                    MYT: "YT",
+                    MEX: "MX",
+                    FSM: "FM",
+                    MDA: "MD",
+                    MCO: "MC",
+                    MNG: "MN",
+                    MNE: "ME",
+                    MSR: "MS",
+                    MAR: "MA",
+                    MOZ: "MZ",
+                    MMR: "MM",
+                    NAM: "NA",
+                    NRU: "NR",
+                    NPL: "NP",
+                    NLD: "NL",
+                    ANT: "AN",
+                    NCL: "NC",
+                    NZL: "NZ",
+                    NIC: "NI",
+                    NER: "NE",
+                    NGA: "NG",
+                    NIU: "NU",
+                    NFK: "NF",
+                    MNP: "MP",
+                    NOR: "NO",
+                    OMN: "OM",
+                    PAK: "PK",
+                    PLW: "PW",
+                    PSE: "PS",
+                    PAN: "PA",
+                    PNG: "PG",
+                    PRY: "PY",
+                    PER: "PE",
+                    PHL: "PH",
+                    PCN: "PN",
+                    POL: "PL",
+                    PRT: "PT",
+                    PRI: "PR",
+                    QAT: "QA",
+                    REU: "RE",
+                    ROU: "RO",
+                    RUS: "RU",
+                    RWA: "RW",
+                    BLM: "BL",
+                    SHN: "SH",
+                    KNA: "KN",
+                    LCA: "LC",
+                    MAF: "MF",
+                    SPM: "PM",
+                    VCT: "VC",
+                    WSM: "WS",
+                    SMR: "SM",
+                    STP: "ST",
+                    SAU: "SA",
+                    SEN: "SN",
+                    SRB: "RS",
+                    SYC: "SC",
+                    SLE: "SL",
+                    SGP: "SG",
+                    SVK: "SK",
+                    SVN: "SI",
+                    SLB: "SB",
+                    SOM: "SO",
+                    ZAF: "ZA",
+                    SGS: "GS",
+                    SSD: "SS",
+                    ESP: "ES",
+                    LKA: "LK",
+                    SDN: "SD",
+                    SUR: "SR",
+                    SJM: "SJ",
+                    SWZ: "SZ",
+                    SWE: "SE",
+                    CHE: "CH",
+                    SYR: "SY",
+                    TWN: "TW",
+                    TJK: "TJ",
+                    TZA: "TZ",
+                    THA: "TH",
+                    TLS: "TL",
+                    TGO: "TG",
+                    TKL: "TK",
+                    TON: "TO",
+                    TTO: "TT",
+                    TUN: "TN",
+                    TUR: "TR",
+                    TKM: "TM",
+                    TCA: "TC",
+                    TUV: "TV",
+                    UGA: "UG",
+                    UKR: "UA",
+                    ARE: "AE",
+                    GBR: "GB",
+                    USA: "US",
+                    UMI: "UM",
+                    URY: "UY",
+                    UZB: "UZ",
+                    VUT: "VU",
+                    VEN: "VE",
+                    VNM: "VN",
+                    VIR: "VI",
+                    WLF: "WF",
+                    ESH: "EH",
+                    YEM: "YE",
+                    ZMB: "ZM",
+                    ZWE: "ZW",
+                    XKX: "XK"
+                },
+                activeTab: 0,
+                death: [],
+                death_major: [],
+                Brazil: [],
+                USA: [],
+                RU: [],
+                UK: [],
+                Italy: [],
+                Germany: [],
+                France: [],
+                Iran: [],
+                China: [],
+                Japan: [],
+                SK: []
+            },
+            methods: {
+                fetchData: async function () {
+
+                    //fetch death cases in the world
+                    var response = await fetch("https://api.npoint.io/1cf4e6da4753b65b4f6c");
+
+                    if (response.ok) {
+                        var datasets = await response.json();
+                        datasets.forEach(element => {
+                            if (element.iso_code in this.iso3_iso2) {
+                                this.death.push({ "id": this.iso3_iso2[element.iso_code], "value": element.total_deaths_per_million })
+                            }
+                        });
+                    } else {
+                        alert(response.statusText);
+                    }
+                    //fetch major country death cases
+                    var response_major = await fetch("https://api.npoint.io/6e293b291a8e138a31ed");
+
+                    if (response_major.ok) {
+                        var datasets = await response_major.json();
+                        datasets.forEach(element => {
+                            this.death_major.push({ "name": element.location, "value": element.total_deaths });
+                        });
+                    } else {
+                        alert(response.statusText);
+                    }
+                    //fetch daily death cases
+                    var response_line = await fetch("https://api.npoint.io/e242f75e777e3befc2a4");
+
+                    if (response_line.ok) {
+                        var datasets = await response_line.json();
+                        datasets.forEach(element => {
+                            if (element.location == "Brazil") {
+                                this.Brazil.push({ date: 0, value: element.new_deaths_smoothed_per_million });
+                            }
+                            else if (element.location == "United States") {
+                                this.USA.push({ date: 0, value: element.new_deaths_smoothed_per_million });
+                            }
+                            else if (element.location == "Russia") {
+                                this.RU.push({ date: 0, value: element.new_deaths_smoothed_per_million });
+                            }
+                            else if (element.location == "United Kingdom") {
+                                this.UK.push({ date: 0, value: element.new_deaths_smoothed_per_million });
+                            }
+                            else if (element.location == "Italy") {
+                                this.Italy.push({ date: 0, value: element.new_deaths_smoothed_per_million });
+                            }
+                            else if (element.location == "Germany") {
+                                this.Germany.push({ date: 0, value: element.new_deaths_smoothed_per_million });
+                            }
+                            else if (element.location == "France") {
+                                this.France.push({ date: 0, value: element.new_deaths_smoothed_per_million });
+                            }
+                            else if (element.location == "Iran") {
+                                this.Iran.push({ date: 0, value: element.new_deaths_smoothed_per_million });
+                            }
+                            else if (element.location == "China") {
+                                this.China.push({ date: 0, value: element.new_deaths_smoothed_per_million });
+                            }
+                            else if (element.location == "Japan") {
+                                this.Japan.push({ date: 0, value: element.new_deaths_smoothed_per_million });
+                            }
+                            else if (element.location == "South Korea") {
+                                this.SK.push({ date: 0, value: element.new_deaths_smoothed_per_million });
+                            }
+                        });
+                        //intialized the date
+                        date = new Date();
+                        date.setHours(0, 0, 0, 0);
+                        date.setMonth(0);
+                        date.setDate(0);
+                        //set date to each country
+                        for (let i = 0; i < this.Brazil.length; i++) {
+                            am5.time.add(date, "day", 1);
+                            this.Brazil[i].date = date.getTime();
+                            this.USA[i].date = date.getTime();
+                            this.RU[i].date = date.getTime();
+                            this.UK[i].date = date.getTime();
+                            this.Italy[i].date = date.getTime();
+                            this.Germany[i].date = date.getTime();
+                            this.France[i].date = date.getTime();
+                            this.Iran[i].date = date.getTime();
+                            this.China[i].date = date.getTime();
+                            this.Japan[i].date = date.getTime();
+                            this.SK[i].date = date.getTime();
+                        }
+                    }
+                    else {
+                        alert(response.statusText);
+                    }
+
+                    this.drawchart4();
+                    this.drawchart5();
+                    this.drawchart6();
+
+                },
+
+                drawchart6: function () {
+                    var data = [{ name: "Brazil", value: this.Brazil }, { name: "United States", value: this.USA },
+                    { name: "Russia", value: this.RU }, { name: "United Kingdom", value: this.UK }, { name: "Italy", value: this.Italy }, { name: "Germany", value: this.Germany },
+                    { name: "France", value: this.France }, { name: "Iran", value: this.Iran }, { name: "China", value: this.China }, { name: "Japan", value: this.Japan }, { name: "South Korea", value: this.SK }];
+
+
+                    am5.ready(function () {
+
+                        // Create root element
+                        // https://www.amcharts.com/docs/v5/getting-started/#Root_element 
+                        var root = am5.Root.new("chart6");
+                        // Set themes
+                        // https://www.amcharts.com/docs/v5/concepts/themes/ 
+                        root.setThemes([
+                            am5themes_Animated.new(root)
+                        ]);
+
+
+                        // Create chart
+                        // https://www.amcharts.com/docs/v5/charts/xy-chart/
+                        var chart = root.container.children.push(am5xy.XYChart.new(root, {
+                            panX: true,
+                            panY: true,
+                            wheelX: "panX",
+                            wheelY: "zoomX",
+                            maxTooltipDistance: 0,
+                        }));
+
+                        //set chart title
+                        chart.topAxesContainer.children.unshift(am5.Label.new(root, {
+                            text: "Daily new confirmed COVID-19 deaths per million people",
+                            fontSize: 25,
+                            fontWeight: "500",
+                            textAlign: "center",
+                            x: am5.percent(50),
+                            centerX: am5.percent(50),
+                            paddingTop: 0,
+                            paddingBottom: 0
+                        }));
+
+                        // Create axes
+                        // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+                        var xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {
+                            maxDeviation: 0.2,
+                            baseInterval: {
+                                timeUnit: "day",
+                                count: 1
+                            },
+                            renderer: am5xy.AxisRendererX.new(root, {}),
+                            tooltip: am5.Tooltip.new(root, {})
+                        }));
+
+                        var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+                            renderer: am5xy.AxisRendererY.new(root, {})
+                        }));
+
+
+                        // Add series
+                        // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+                        data.forEach(element => {
+                            var series = chart.series.push(am5xy.LineSeries.new(root, {
+                                name: element.name,
+                                xAxis: xAxis,
+                                yAxis: yAxis,
+                                valueYField: "value",
+                                valueXField: "date",
+                                legendValueText: "{valueY}",
+                                tooltip: am5.Tooltip.new(root, {
+                                    pointerOrientation: "horizontal",
+                                    labelText: "{name}: {valueY}"
+                                })
+                            }));
+                            series.data.setAll(element.value);
+                            // Make stuff animate on load
+                            series.appear();
+                        });
+
+
+                        // Add cursor
+                        // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+                        var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
+                            behavior: "none"
+                        }));
+                        cursor.lineY.set("visible", false);
+
+
+                        // Add scrollbar
+                        // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
+                        var scrollbarX = am5.Scrollbar.new(root, {
+                            orientation: "horizontal"
+                        });
+
+                        chart.set("scrollbarX", scrollbarX);
+                        chart.bottomAxesContainer.children.push(scrollbarX);
+
+
+                        // Add legend
+                        // https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
+                        var legend = chart.rightAxesContainer.children.push(am5.Legend.new(root, {
+                            width: 200,
+                            paddingLeft: 15,
+                            height: am5.percent(100)
+                        }));
+
+                        // When legend item container is hovered, dim all the series except the hovered one
+                        legend.itemContainers.template.events.on("pointerover", function (e) {
+                            var itemContainer = e.target;
+
+                            // As series list is data of a legend, dataContext is series
+                            var series = itemContainer.dataItem.dataContext;
+
+                            chart.series.each(function (chartSeries) {
+                                if (chartSeries != series) {
+                                    chartSeries.strokes.template.setAll({
+                                        strokeOpacity: 0.15,
+                                        stroke: am5.color(0x000000)
+                                    });
+                                } else {
+                                    chartSeries.strokes.template.setAll({
+                                        strokeWidth: 3
+                                    });
+                                }
+                            })
+                        })
+
+                        // When legend item container is unhovered, make all series as they are
+                        legend.itemContainers.template.events.on("pointerout", function (e) {
+                            var itemContainer = e.target;
+                            var series = itemContainer.dataItem.dataContext;
+
+                            chart.series.each(function (chartSeries) {
+                                chartSeries.strokes.template.setAll({
+                                    strokeOpacity: 1,
+                                    strokeWidth: 1,
+                                    stroke: chartSeries.get("fill")
+                                });
+                            });
+                        })
+
+                        legend.itemContainers.template.set("width", am5.p100);
+                        legend.valueLabels.template.setAll({
+                            width: am5.p100,
+                            textAlign: "right"
+                        });
+
+                        // It's is important to set legend data after all the events are set on template, otherwise events won't be copied
+                        legend.data.setAll(chart.series.values);
+
+
+                        // Make stuff animate on load
+                        // https://www.amcharts.com/docs/v5/concepts/animations/
+                        chart.appear(1000, 100);
+
+                    });
+                },
+
+                drawchart5: function () {
+                    data = this.death_major;
+                    am5.ready(function () {
+
+                        // Create root element
+                        // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+                        var root = am5.Root.new("chart5");
+
+
+                        // Set themes
+                        // https://www.amcharts.com/docs/v5/concepts/themes/
+                        root.setThemes([
+                            am5themes_Animated.new(root)
+                        ]);
+
+
+                        // Create chart
+                        // https://www.amcharts.com/docs/v5/charts/xy-chart/
+                        var chart = root.container.children.push(am5xy.XYChart.new(root, {
+                            panX: false,
+                            panY: false,
+                            wheelX: "none",
+                            wheelY: "none"
+                        }));
+
+                        // We don't want zoom-out button to appear while animating, so we hide it
+                        chart.zoomOutButton.set("forceHidden", true);
+
+
+                        // Create axes
+                        // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+                        var yRenderer = am5xy.AxisRendererY.new(root, {
+                            minGridDistance: 30
+                        });
+
+                        var yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
+                            maxDeviation: 0,
+                            categoryField: "name",
+                            renderer: yRenderer,
+                            tooltip: am5.Tooltip.new(root, { themeTags: ["axis"] })
+                        }));
+
+                        var xAxis = chart.xAxes.push(am5xy.ValueAxis.new(root, {
+                            maxDeviation: 0,
+                            min: 0,
+                            extraMax: 0.1,
+                            renderer: am5xy.AxisRendererX.new(root, {}),
+                            categoryField: "name"
+                        }));
+
+
+                        // Add series
+                        // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+                        var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                            name: "Series 1",
+                            xAxis: xAxis,
+                            yAxis: yAxis,
+                            valueXField: "value",
+                            categoryYField: "name",
+                            legendValueText: "{valueY}",
+                            tooltip: am5.Tooltip.new(root, {
+                                pointerOrientation: "left",
+                                labelText: "{valueX}"
+                            })
+                        }));
+
+
+                        // Rounded corners for columns
+                        series.columns.template.setAll({
+                            cornerRadiusTR: 5,
+                            cornerRadiusBR: 5
+                        });
+
+                        // Make each column to be of a different color
+                        series.columns.template.adapters.add("fill", function (fill, target) {
+                            return chart.get("colors").getIndex(series.columns.indexOf(target));
+                        });
+
+                        series.columns.template.adapters.add("stroke", function (stroke, target) {
+                            return chart.get("colors").getIndex(series.columns.indexOf(target));
+                        });
+
+                        yAxis.data.setAll(data);
+                        series.data.setAll(data);
+                        sortCategoryAxis();
+
+                        //Add title
+                        chart.topAxesContainer.children.unshift(am5.Label.new(root, {
+                            text: "cumulative number of confirmed COVID-19 deaths",
+                            fontSize: 25,
+                            fontWeight: "500",
+                            textAlign: "center",
+                            x: am5.percent(50),
+                            centerX: am5.percent(50),
+                            paddingTop: 0,
+                            paddingBottom: 0
+                        }));
+
+                        //Add legend
+                        var legend = chart.bottomAxesContainer.children.push(am5.Legend.new(root, {
+                            nameField: "categoryY",
+                            centerX: am5.percent(50),
+                            x: am5.percent(50),
+                        }));
+
+                        legend.data.setAll(series.dataItems);
+
+                        // Get series item by category
+                        function getSeriesItem(category) {
+                            for (var i = 0; i < series.dataItems.length; i++) {
+                                var dataItem = series.dataItems[i];
+                                if (dataItem.get("categoryY") == category) {
+                                    return dataItem;
+                                }
+                            }
+                        }
+
+                        chart.set("cursor", am5xy.XYCursor.new(root, {
+                            behavior: "none",
+                            xAxis: xAxis,
+                            yAxis: yAxis
+                        }));
+
+
+                        // Axis sorting
+                        function sortCategoryAxis() {
+
+                            // Sort by value
+                            series.dataItems.sort(function (x, y) {
+                                return x.get("valueX") - y.get("valueX"); // descending
+                                //return y.get("valueY") - x.get("valueX"); // ascending
+                            })
+
+                            // Go through each axis item
+                            am5.array.each(yAxis.dataItems, function (dataItem) {
+                                // get corresponding series item
+                                var seriesDataItem = getSeriesItem(dataItem.get("category"));
+
+                                if (seriesDataItem) {
+                                    // get index of series data item
+                                    var index = series.dataItems.indexOf(seriesDataItem);
+                                    // calculate delta position
+                                    var deltaPosition = (index - dataItem.get("index", 0)) / series.dataItems.length;
+                                    // set index to be the same as series data item index
+                                    dataItem.set("index", index);
+                                    // set deltaPosition instanlty
+                                    dataItem.set("deltaPosition", -deltaPosition);
+                                    // animate delta position to 0
+                                    dataItem.animate({
+                                        key: "deltaPosition",
+                                        to: 0,
+                                        duration: 1000,
+                                        easing: am5.ease.out(am5.ease.cubic)
+                                    })
+                                }
+                            });
+
+                            // Sort axis items by index.
+                            // This changes the order instantly, but as deltaPosition is set,
+                            // they keep in the same places and then animate to true positions.
+                            yAxis.dataItems.sort(function (x, y) {
+                                return x.get("index") - y.get("index");
+                            });
+                        }
+
+                        // Make stuff animate on load
+                        // https://www.amcharts.com/docs/v5/concepts/animations/
+                        series.appear(1000);
+                        chart.appear(1000, 100);
+
+                    });
+                },
+
+                drawchart4: function () {
+                    am4core.useTheme(am4themes_animated);
+                    var chart = am4core.create("chart4", am4maps.MapChart);
+                    // Set map definition
+                    chart.geodata = am4geodata_worldUltra;
+                    // Set projection
+                    chart.projection = new am4maps.projections.Miller();
+
+                    // Create map polygon series
+                    var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+                    // Remove Antarctica
+                    polygonSeries.exclude = ["AQ"];
+
+                    //Set min/max fill color for each area
+                    polygonSeries.heatRules.push({
+                        property: "fill",
+                        target: polygonSeries.mapPolygons.template,
+                        minValue: 0,
+                        maxValue: 4000,
+                        min: am4core.color("#fdffb6"),
+                        max: am4core.color("#9d0208"),
+                    });
+                    // Make map load polygon data (state shapes and names) from GeoJSON
+                    polygonSeries.useGeodata = true;
+
+                    polygonSeries.data = this.death;
+
+                    //add title
+                    var title = chart.titles.create();
+                    title.text = "Cumulative confirmed deaths per million people";
+                    title.fontSize = 25;
+                    title.fontWeight = 500,
+                        title.marginBottom = 30;
+
+                    let heatLegend = chart.createChild(am4maps.HeatLegend);
+                    heatLegend.series = polygonSeries;
+                    heatLegend.minColor = am4core.color("#fdffb6");
+                    heatLegend.maxColor = am4core.color("#9d0208");
+                    heatLegend.minValue = 0;
+                    heatLegend.maxValue = 4000;
+                    heatLegend.markerCount = 10;
+                    heatLegend.align = "left";
+                    heatLegend.valign = "bottom";
+                    heatLegend.height = am4core.percent(60);
+                    heatLegend.orientation = "vertical";
+                    heatLegend.marginRight = am4core.percent(4);
+                    heatLegend.valueAxis.renderer.dx = 25;
+                    heatLegend.valueAxis.strictMinMax = false;
+                    heatLegend.valueAxis.fontSize = 12;
+                    // Configure series tooltip
+                    var polygonTemplate = polygonSeries.mapPolygons.template;
+                    polygonTemplate.fill = am4core.color("#D3C0D2");
+                    polygonTemplate.tooltipText = "{name}: {value}";
+                    polygonTemplate.nonScalingStroke = true;
+                    polygonTemplate.strokeWidth = 0.5;
+                    // Create hover state and set alternative fill color
+                    var hs = polygonTemplate.states.create("hover");
+                    hs.properties.fill = am4core.color("#023047");
+                    // heat legend behavior
+                    polygonSeries.mapPolygons.template.events.on("over", function (event) {
+                        handleHover(event.target);
+                    })
+
+                    polygonSeries.mapPolygons.template.events.on("hit", function (event) {
+                        handleHover(event.target);
+                    })
+
+                    function handleHover(column) {
+                        if (!isNaN(column.dataItem.value)) {
+                            if (column.dataItem.value <= 4000) {
+                                heatLegend.valueAxis.showTooltipAt(column.dataItem.value);
+                                heatLegend.valueAxis.tooltipText = column.dataItem.value;
+                            } else {
+                                heatLegend.valueAxis.showTooltipAtPosition(1, true);
+                                heatLegend.valueAxis.tooltipText = column.dataItem.value;
+                            }
+                        }
+                        else {
+                            heatLegend.valueAxis.hideTooltip();
+                            heatLegend.valueAxis.tooltipText = column.dataItem.value;
+                        }
+                    }
+
+                    polygonSeries.mapPolygons.template.events.on("out", function (event) {
+                        heatLegend.valueAxis.hideTooltip();
+                    })
+
+                }
+            },
+            mounted: function () {
+                this.fetchData();
+            },
+        });
+    </script>
+
+
+</body>
+
+</html>
